@@ -1,7 +1,7 @@
 module Main where
 
-import System.Environment
-import GildedRose
+import System.Environment (getArgs)
+import GildedRose (Item(Item), GildedRose, updateQuality)
 
 
 main :: IO ()
@@ -19,7 +19,7 @@ main = do
     printUpdate (items, day) = do
       putStrLn ("-------- day " ++ show day ++ " --------")
       putStrLn "name, sellIn, quality"
-      mapM_ (print) items
+      mapM_ print items
       putStrLn ""
 
     daysFromArg :: IO Int
