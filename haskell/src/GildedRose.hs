@@ -17,22 +17,20 @@ updateQuality = map updateQualityItem
         item
       else
         let sellOutFkt f = if sellIn < 1 then f else id
-        in Item name (sellIn - 1) 
+            updFkt f = sellOutFkt f . f
+        in Item name (sellIn - 1)
             ((case name of
-                "Aged Brie" -> 
-                  sellOutFkt incQuality 
-                  . incQuality
+                "Aged Brie" ->
+                  updFkt incQuality
                 "Backstage passes to a TAFKAL80ETC concert" ->
-                  sellOutFkt (const 0) .   
-                  incQuality 
-                  . (if sellIn < 11 then incQuality else id)  
-                  . (if sellIn < 6 then incQuality else id)
+                  sellOutFkt $ const 0 .
+                  incQuality
+                  . (if sellIn < 11 then incQuality else id)
+                  . (if sellIn <  6 then incQuality else id)
                 "Conjured Mana Cake" ->
-                  sellOutFkt (decQuality . decQuality) 
-                  . (decQuality . decQuality)
-                _ -> 
-                  sellOutFkt decQuality 
-                  . decQuality) 
+                  updFkt $ decQuality . decQuality
+                _ ->
+                  updFkt decQuality)
             quality)
 
 decQuality :: Int -> Int
